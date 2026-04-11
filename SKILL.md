@@ -72,7 +72,8 @@ Follow this checklist in order, using TaskCreate to track each item:
 4. **Logo** — generate SVG logos or write a brief (uses colors from Phase 3)
 5. **Tech stack** — best-fit recommendation with rationale
 6. **Generate output files** — write all artifacts to `docs/crucible/`
-7. **Push to tracker (if configured)** — upload files via API if `~/.crucible/config.json` exists
+7. **Visual preview** — optionally generate and open an HTML brand preview in browser
+8. **Push to tracker (if configured)** — upload files via API if `~/.crucible/config.json` exists
 
 ## Phase 1: Concept Exploration
 
@@ -242,7 +243,8 @@ docs/crucible/
 ├── brand.md                              # Name, tagline, tone, personality
 ├── design.md                             # Color palette, typography, UI style
 ├── tech-stack.md                         # Recommended stack with rationale
-└── logo.svg                              # Generated SVG logo (if user chose one)
+├── logo.svg                              # Generated SVG logo (if user chose one)
+└── preview.html                          # Visual brand preview (if user requested)
 ```
 
 If the brainstorming skill generated an implementation plan during Phase 1, ensure it is placed in the `plans/` directory.
@@ -352,7 +354,30 @@ Add Crucible design artifacts for [Project Name]
 
 Do not stage unrelated files. Commit to the current branch.
 
+### Visual Preview (Optional)
+
+After generating all files, ask the user: "Want to see a visual preview of your brand in the browser?"
+
+**If yes:** Generate a single self-contained HTML file at `docs/crucible/preview.html` that displays:
+
+- **Brand header** — project name in the heading font, tagline, personality attributes
+- **Color palette** — visual swatches (actual colored rectangles) with hex codes and usage labels, both light and dark mode
+- **Typography** — import the actual Google Fonts and render sample headings, body text, and a paragraph
+- **Sample UI components** — a card, button, and input styled with the palette + typography + UI style to show how the design system feels in practice
+- **Logo** — display the SVG logo(s) if generated, or the logo brief concepts
+- **Tech stack** — visual badges/cards for each technology choice
+
+**Guidelines for the preview page:**
+- Self-contained HTML (inline CSS, no external dependencies except Google Fonts)
+- Use the project's actual color palette and typography throughout the page
+- Make it responsive (should look good on both phone and laptop)
+- It should feel like a brand book / design system preview
+- Open the file in the user's browser after generating it
+
+**If no:** Skip and move on.
+
 ## Phase 7: Push to Tracker (Optional)
+
 
 Check if `~/.crucible/config.json` exists.
 
