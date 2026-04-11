@@ -40,13 +40,27 @@ Use interactive mode unless the user explicitly requests one-shot.
 
 User describes everything upfront. Crucible generates the full package in one pass. Activate when the user says something like "just generate it" or provides a detailed brief.
 
-## Phase Transitions
+**One-shot mode differences:**
+- Skip phase transitions (no recap/preview between phases)
+- Phase 1: Write the design spec directly instead of invoking brainstorming interactively
+- Phase 4: Generate a logo brief by default (not SVG generation)
+- Skip TaskCreate tracking — just generate everything sequentially
+- If `ui-ux-pro-max` is available, use its data but don't invoke it interactively
+
+## Phase Transitions (Interactive Mode Only)
 
 Between each phase, provide a brief recap and preview:
 
 > "Great — [phase name] is locked in. Here's what we decided: [1-2 line summary]. Next up: [next phase name] — [what it involves and why it matters]. Ready?"
 
 This keeps the user oriented and gives them a chance to revisit anything before moving forward.
+
+## Re-running Crucible
+
+If Crucible output already exists in `docs/crucible/`, ask the user: "I see existing Crucible files. Want me to start fresh (overwrite) or update specific parts?"
+
+- **Start fresh:** Overwrite all files
+- **Update:** Let the user pick which phases to re-run (e.g., "just redo the brand")
 
 ## Checklist
 
@@ -62,15 +76,15 @@ Follow this checklist in order, using TaskCreate to track each item:
 
 ## Phase 1: Concept Exploration
 
-Invoke the `superpowers:brainstorming` skill to explore the idea. This handles:
+**Interactive mode:** Invoke the `superpowers:brainstorming` skill to explore the idea. Follow its process fully — it handles concept questions, approach proposals, and design spec generation.
 
-- What's the idea, who's it for, what problem does it solve
-- Purpose, constraints, success criteria
-- Scope assessment — is this one project or multiple?
-- Proposal of 2-3 approaches with trade-offs
-- Design spec generation
+**One-shot mode:** Write the design spec directly based on the user's brief. Cover these essentials:
+- Problem statement and target users
+- Core features (prioritized)
+- Constraints and scope boundaries
+- Recommended approach with rationale
 
-Follow the brainstorming skill's process fully. Once the design spec is written and approved, continue to Phase 2.
+Once the design spec is written and approved (interactive) or generated (one-shot), continue to Phase 2.
 
 **Output:** `docs/crucible/specs/YYYY-MM-DD-<topic>-design.md`
 
@@ -194,7 +208,7 @@ Write a logo brief instead — a text description of 2-3 logo concepts that a de
 - How it connects to the brand name and meaning
 - Suggested colors from the Phase 3 palette
 
-Save the brief in `brand.md` under a "Logo Direction" section.
+Save the brief in `brand.md` under the "## Logo" section.
 
 **In one-shot mode:** Generate a logo brief by default unless the user explicitly requested SVG logos.
 
@@ -273,15 +287,21 @@ Generated logo saved as `logo.svg`. [Brief description of the chosen concept.]
 ```markdown
 # [Project Name] — Visual Identity
 
-## Color Palette
+## Color Palette (Light Mode)
 
 | Token | Hex | Usage |
 |---|---|---|
 | Primary | #XXXXXX | [description] |
 | ... | ... | ... |
 
-### Dark Mode
-[Dark mode variant description and key color adjustments]
+## Color Palette (Dark Mode)
+
+| Token | Hex | Usage |
+|---|---|---|
+| Background | #XXXXXX | [description] |
+| ... | ... | ... |
+
+[Key adjustments from light mode]
 
 ## Typography
 
