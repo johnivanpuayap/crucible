@@ -9,7 +9,7 @@ Crucible is a Claude Code skill that transforms raw ideas into fully designed pr
 Crucible walks you through (or generates in one shot) a complete project design:
 
 1. **Concept Exploration** — What's the idea, who's it for, what problem does it solve
-2. **Brand Identity** — Name suggestions, tagline, tone of voice
+2. **Brand Identity** — Name suggestions, tagline, tone of voice, logo direction, personality
 3. **Visual Identity** — Color palette, typography, UI style
 4. **Tech Stack** — Best-fit recommendation with rationale
 
