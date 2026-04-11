@@ -104,19 +104,46 @@ Ask the user to pick where the brand sits on these spectrums (or propose based o
 - Technical ←→ Approachable
 - Minimal ←→ Expressive
 
-### 2d. Logo Direction
+### 2d. Logo
 
-Help the user define a logo concept. Ask about:
-- **Style:** Wordmark, lettermark, icon + wordmark, abstract symbol, mascot
-- **Mood:** Should it feel geometric, organic, playful, minimal, bold?
-- **Inspiration:** Any existing logos they admire?
+Ask the user: "Want me to generate some logo options? I can create SVG logos you can use right away, or we can skip this and just write a logo brief for later."
 
-Generate a text description of 2-3 logo concepts that a designer (or AI image tool) could execute. Each concept includes:
+**If the user wants logos generated:**
+
+Ask about preferences (one question at a time):
+- **Style:** Wordmark, lettermark, icon + wordmark, abstract symbol
+- **Mood:** Geometric, organic, playful, minimal, bold?
+- **Any inspiration?** Existing logos they admire?
+
+Then generate **3 SVG logo concepts** as actual code. Each logo should:
+- Use the brand's chosen colors from the palette
+- Use the brand's heading font (or a clean fallback)
+- Be simple, clean, and scalable — logos should work at 32px and 512px
+- Include the brand name (for wordmarks and icon+wordmark styles)
+
+**SVG guidelines:**
+- Keep it simple — geometric shapes, clean lines, no complex illustrations
+- Use `viewBox` for proper scaling
+- Stick to the brand palette (primary, secondary, accent colors)
+- No raster images or external dependencies
+- Each SVG should be self-contained
+
+Present all 3 to the user (write them as temporary HTML files and open in browser if possible, or describe them clearly). Let the user:
+- Pick one
+- Request tweaks to a concept
+- Ask for a new round
+- Skip and move on
+
+Save the chosen logo as `docs/crucible/logo.svg`.
+
+**If the user wants to skip:**
+
+Write a logo brief instead — a text description of 2-3 logo concepts that a designer or AI image tool could execute later. Each concept includes:
 - Visual description (shape, composition, style)
 - How it connects to the brand name and meaning
-- Suggested colors from the palette (once Phase 3 is done, revisit this)
+- Suggested colors from the palette
 
-**Note:** Crucible does not generate images. It produces a detailed logo brief that the user can hand to a designer or an image generation tool.
+Save the brief in `brand.md` under a "Logo Direction" section.
 
 ### 2e. Brand Personality
 
@@ -192,9 +219,10 @@ Write all artifacts to the project's `docs/crucible/` directory:
 ```
 docs/crucible/
 ├── specs/YYYY-MM-DD-<topic>-design.md   # Full design spec (from Phase 1)
-├── brand.md                              # Name, tagline, tone, personality
+├── brand.md                              # Name, tagline, tone, personality, logo brief
 ├── design.md                             # Color palette, typography, UI style
-└── tech-stack.md                         # Recommended stack with rationale
+├── tech-stack.md                         # Recommended stack with rationale
+└── logo.svg                              # Generated SVG logo (if user chose one)
 ```
 
 ### brand.md format
