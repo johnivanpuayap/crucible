@@ -50,14 +50,15 @@ This keeps the user oriented and gives them a chance to revisit anything before 
 
 ## Checklist
 
-You MUST create a task for each of these items and complete them in order:
+Follow this checklist in order, using TaskCreate to track each item:
 
 1. **Concept exploration** — understand the idea, who it's for, what problem it solves
-2. **Brand identity** — name, tagline, tone of voice, logo direction, personality
+2. **Brand identity** — name, tagline, tone of voice, personality
 3. **Visual identity** — color palette, typography, UI style
-4. **Tech stack** — best-fit recommendation with rationale
-5. **Generate output files** — write all artifacts to `docs/crucible/`
-6. **Push to tracker (if configured)** — upload files via API if `~/.crucible/config.json` exists
+4. **Logo** — generate SVG logos or write a brief (uses colors from Phase 3)
+5. **Tech stack** — best-fit recommendation with rationale
+6. **Generate output files** — write all artifacts to `docs/crucible/`
+7. **Push to tracker (if configured)** — upload files via API if `~/.crucible/config.json` exists
 
 ## Phase 1: Concept Exploration
 
@@ -104,48 +105,7 @@ Ask the user to pick where the brand sits on these spectrums (or propose based o
 - Technical ←→ Approachable
 - Minimal ←→ Expressive
 
-### 2d. Logo
-
-Ask the user: "Want me to generate some logo options? I can create SVG logos you can use right away, or we can skip this and just write a logo brief for later."
-
-**If the user wants logos generated:**
-
-Ask about preferences (one question at a time):
-- **Style:** Wordmark, lettermark, icon + wordmark, abstract symbol
-- **Mood:** Geometric, organic, playful, minimal, bold?
-- **Any inspiration?** Existing logos they admire?
-
-Then generate **3 SVG logo concepts** as actual code. Each logo should:
-- Use the brand's chosen colors from the palette
-- Use the brand's heading font (or a clean fallback)
-- Be simple, clean, and scalable — logos should work at 32px and 512px
-- Include the brand name (for wordmarks and icon+wordmark styles)
-
-**SVG guidelines:**
-- Keep it simple — geometric shapes, clean lines, no complex illustrations
-- Use `viewBox` for proper scaling
-- Stick to the brand palette (primary, secondary, accent colors)
-- No raster images or external dependencies
-- Each SVG should be self-contained
-
-Present all 3 to the user (write them as temporary HTML files and open in browser if possible, or describe them clearly). Let the user:
-- Pick one
-- Request tweaks to a concept
-- Ask for a new round
-- Skip and move on
-
-Save the chosen logo as `docs/crucible/logo.svg`.
-
-**If the user wants to skip:**
-
-Write a logo brief instead — a text description of 2-3 logo concepts that a designer or AI image tool could execute later. Each concept includes:
-- Visual description (shape, composition, style)
-- How it connects to the brand name and meaning
-- Suggested colors from the palette
-
-Save the brief in `brand.md` under a "Logo Direction" section.
-
-### 2e. Brand Personality
+### 2d. Brand Personality
 
 Summarize in 3-4 attributes (e.g., "Calm, organized, encouraging").
 
@@ -153,13 +113,12 @@ Summarize in 3-4 attributes (e.g., "Calm, organized, encouraging").
 
 ## Phase 3: Visual Identity
 
-Use the `ui-ux-pro-max` skill as a design intelligence reference. Run the design system generator:
+Use the `ui-ux-pro-max` skill as a design intelligence reference. If the user has ui-ux-pro-max installed, invoke it via the Skill tool to get design system recommendations. Otherwise, generate recommendations manually using these guidelines:
 
-```bash
-python3 [ui-ux-pro-max-scripts-path]/search.py "<product-type> <keywords>" --design-system -p "<Project Name>"
-```
-
-If the script is not available, generate recommendations manually based on the ui-ux-pro-max skill's guidelines.
+- Match UI style to the product type
+- Choose a color palette that reflects the brand personality from Phase 2
+- Pick a typography pairing that matches the tone of voice
+- Consider both light and dark mode from the start
 
 Present the following to the user for approval:
 
@@ -195,7 +154,53 @@ Recommend a UI style (flat, glassmorphism, minimal, motion-driven, etc.) with:
 
 **Output:** `docs/crucible/design.md`
 
-## Phase 4: Tech Stack
+## Phase 4: Logo
+
+Now that the brand identity (Phase 2) and color palette/typography (Phase 3) are locked in, create the logo.
+
+Ask the user: "Want me to generate some logo options using your brand colors? I can create SVG logos you can use right away, or we can skip this and just write a logo brief for later."
+
+**If the user wants logos generated:**
+
+Ask about preferences (one question at a time):
+- **Style:** Wordmark, lettermark, icon + wordmark, abstract symbol
+- **Mood:** Geometric, organic, playful, minimal, bold?
+- **Any inspiration?** Existing logos they admire?
+
+Then generate **3 SVG logo concepts** as actual code. Each logo should:
+- Use the brand's color palette from Phase 3 (primary, secondary, accent)
+- Use the brand's heading font from Phase 3 (or a clean sans-serif fallback)
+- Be simple, clean, and scalable — logos should work at 32px and 512px
+- Include the brand name (for wordmarks and icon+wordmark styles)
+
+**SVG guidelines:**
+- Keep it simple — geometric shapes, clean lines, no complex illustrations
+- Use `viewBox` for proper scaling
+- No raster images or external dependencies
+- Each SVG should be self-contained
+
+Present all 3 to the user (write them as temporary HTML files and open in browser if possible, or describe them clearly). Let the user:
+- Pick one
+- Request tweaks to a concept
+- Ask for a new round
+- Skip and move on
+
+Save the chosen logo as `docs/crucible/logo.svg`.
+
+**If the user wants to skip:**
+
+Write a logo brief instead — a text description of 2-3 logo concepts that a designer or AI image tool could execute later. Each concept includes:
+- Visual description (shape, composition, style)
+- How it connects to the brand name and meaning
+- Suggested colors from the Phase 3 palette
+
+Save the brief in `brand.md` under a "Logo Direction" section.
+
+**In one-shot mode:** Generate a logo brief by default unless the user explicitly requested SVG logos.
+
+**Output:** `docs/crucible/logo.svg` (if generated) or logo brief in `brand.md`
+
+## Phase 5: Tech Stack
 
 Recommend the best-fit tech stack based on the project's needs. Always recommend what fits best, regardless of the user's existing experience.
 
@@ -212,18 +217,21 @@ For each choice, include:
 
 **Output:** `docs/crucible/tech-stack.md`
 
-## Phase 5: Generate Output Files
+## Phase 6: Generate Output Files
 
 Write all artifacts to the project's `docs/crucible/` directory:
 
 ```
 docs/crucible/
 ├── specs/YYYY-MM-DD-<topic>-design.md   # Full design spec (from Phase 1)
-├── brand.md                              # Name, tagline, tone, personality, logo brief
+├── plans/YYYY-MM-DD-<plan-name>.md      # Implementation plan (from Phase 1, if generated)
+├── brand.md                              # Name, tagline, tone, personality
 ├── design.md                             # Color palette, typography, UI style
 ├── tech-stack.md                         # Recommended stack with rationale
 └── logo.svg                              # Generated SVG logo (if user chose one)
 ```
+
+If the brainstorming skill generated an implementation plan during Phase 1, ensure it is placed in the `plans/` directory.
 
 ### brand.md format
 
@@ -245,18 +253,18 @@ docs/crucible/
 ## Personality
 [3-4 attributes with brief descriptions]
 
-## Logo Direction
+## Logo
+<!-- If SVG logo was generated in Phase 4: -->
+Generated logo saved as `logo.svg`. [Brief description of the chosen concept.]
 
+<!-- If logo was skipped in Phase 4, include the brief instead: -->
 ### Concept 1: [Name]
-- **Style:** [wordmark / lettermark / icon+wordmark / symbol / mascot]
+- **Style:** [wordmark / lettermark / icon+wordmark / symbol]
 - **Description:** [detailed visual description]
 - **Colors:** [from palette]
 - **Connection:** [how it ties to the brand name/meaning]
 
 ### Concept 2: [Name]
-...
-
-### Concept 3: [Name]
 ...
 ```
 
@@ -316,9 +324,15 @@ docs/crucible/
 [Brief notes on what was passed over and why]
 ```
 
-Commit all generated files to git.
+Stage only the `docs/crucible/` files and commit with a message like:
 
-## Phase 6: Push to Tracker (Optional)
+```
+Add Crucible design artifacts for [Project Name]
+```
+
+Do not stage unrelated files. Commit to the current branch.
+
+## Phase 7: Push to Tracker (Optional)
 
 Check if `~/.crucible/config.json` exists.
 
