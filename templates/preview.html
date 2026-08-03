@@ -1,0 +1,305 @@
+<!doctype html>
+<!--
+  Crucible — brand preview template.
+
+  Fill every {{PLACEHOLDER}} with a real value from brand.md / design.md / tech-stack.md.
+  Repeat the inner HTML of each {{#LOOP}}…{{/LOOP}} block once per item, then delete the markers.
+
+  Rules (see SKILL.md Phase 6):
+    - Do NOT add, remove, or reorder sections.
+    - Do NOT modify the CSS. These styles are canonical.
+    - Only placeholder CONTENT changes between projects.
+    - Inline the SVG logos directly. Use the -mono-light variants on dark panels.
+    - If Phase 4 produced a logo brief instead of SVGs, replace each {{*_SVG}} with the concept's
+      text description wrapped in <p class="brief-text">…</p>.
+    - The favicon section always shows 16 / 32 / 64.
+-->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>{{PROJECT_NAME}} — Brand Preview</title>
+<style>
+  @import url('{{FONT_IMPORT_URL}}');
+
+  :root{
+    --primary:{{PRIMARY}};       --on-primary:{{ON_PRIMARY}};
+    --secondary:{{SECONDARY}};   --accent:{{ACCENT}};
+    --background:{{BACKGROUND}}; --surface:{{SURFACE}};
+    --foreground:{{FOREGROUND}}; --muted:{{MUTED}};
+    --muted-fg:{{MUTED_FOREGROUND}}; --border:{{BORDER}};
+    --destructive:{{DESTRUCTIVE}};
+    --dark-bg:{{DARK_BACKGROUND}};   --dark-surface:{{DARK_SURFACE}};
+    --dark-fg:{{DARK_FOREGROUND}};   --dark-muted-fg:{{DARK_MUTED_FOREGROUND}};
+    --dark-border:{{DARK_BORDER}};   --dark-primary:{{DARK_PRIMARY}};
+    --dark-on-primary:{{DARK_ON_PRIMARY}};
+    --font-h:{{FONT_HEADING_STACK}}; --font-b:{{FONT_BODY_STACK}};
+    --r-card:12px; --r-button:10px;
+    --shadow:0 2px 12px rgba(0,0,0,.06);
+  }
+  *{box-sizing:border-box}
+  body{ margin:0; background:var(--background); color:var(--foreground);
+        font-family:var(--font-b); font-size:16px; line-height:1.5 }
+  .wrap{ max-width:1180px; margin:0 auto; padding:56px 28px 80px }
+  h1,h2,h3{ font-family:var(--font-h); margin:0; line-height:1.15 }
+
+  .hero{ display:flex; align-items:center; gap:26px; flex-wrap:wrap;
+         background:var(--surface); border:1px solid var(--border);
+         border-radius:20px; padding:34px 36px; box-shadow:var(--shadow); margin-bottom:44px }
+  .hero .mark{ width:104px; height:104px; flex:0 0 104px }
+  .hero .mark svg,.hero .mark img{ width:100%; height:100%; border-radius:23% }
+  .hero h1{ font-size:clamp(38px,6vw,58px); font-weight:700; letter-spacing:-.02em; color:var(--secondary) }
+  .hero .tag{ font-size:clamp(15px,2.4vw,19px); color:var(--primary); font-weight:600; margin-top:6px }
+  .hero .desc{ color:var(--muted-fg); margin-top:12px; max-width:520px; font-size:15px }
+
+  section{ margin-bottom:48px }
+  .sh{ display:flex; align-items:baseline; gap:13px; margin-bottom:18px;
+       border-bottom:1px solid var(--border); padding-bottom:9px }
+  .sh h2{ font-size:12px; letter-spacing:.16em; text-transform:uppercase;
+          font-family:var(--font-b); font-weight:700; color:var(--primary) }
+  .sh span{ font-size:13.5px; color:var(--muted-fg) }
+
+  .grid{ display:grid; gap:16px }
+  .g2{ grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) }
+  .g3{ grid-template-columns:repeat(auto-fit,minmax(230px,1fr)) }
+  .g4{ grid-template-columns:repeat(auto-fit,minmax(170px,1fr)) }
+  .card{ background:var(--surface); border:1px solid var(--border);
+         border-radius:var(--r-card); padding:20px; box-shadow:var(--shadow) }
+  .lbl{ font-size:10.5px; letter-spacing:.11em; text-transform:uppercase;
+        color:var(--muted-fg); font-weight:600; margin-bottom:9px }
+  .brief-text{ font-size:13.5px; color:var(--muted-fg); margin:0; line-height:1.55 }
+
+  .logobox{ display:flex; align-items:center; justify-content:center; gap:14px;
+            min-height:104px; border-radius:10px; padding:16px }
+  .on-light{ background:#fff; border:1px solid var(--border) }
+  .on-dark{ background:var(--dark-surface) }
+  .logobox svg,.logobox img{ max-width:100%; height:auto }
+  .favrow{ display:flex; gap:16px; align-items:flex-end; justify-content:center; min-height:104px }
+  .favrow figure{ margin:0; text-align:center }
+  .favrow figcaption{ font-size:10px; color:var(--muted-fg); margin-top:6px }
+
+  .sw{ border-radius:10px; overflow:hidden; border:1px solid var(--border) }
+  .sw .chip{ height:66px } .sw .meta{ padding:9px 11px; background:var(--surface) }
+  .sw .n{ font-size:13px; font-weight:600 }
+  .sw .h{ font-size:11px; color:var(--muted-fg); font-family:ui-monospace,Consolas,monospace }
+  .darkpanel{ border-color:var(--dark-border) }
+  .darkpanel .meta{ background:var(--dark-surface) }
+  .darkpanel .n{ color:var(--dark-fg) } .darkpanel .h{ color:var(--dark-muted-fg) }
+
+  .type-row{ display:flex; align-items:baseline; gap:16px; padding:11px 0;
+             border-bottom:1px solid var(--border); flex-wrap:wrap }
+  .type-row:last-child{ border-bottom:none }
+  .type-row .rl{ font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+                 color:var(--muted-fg); width:120px; flex:0 0 120px; font-weight:600 }
+
+  .btn{ display:inline-block; padding:11px 20px; border-radius:var(--r-button);
+        font-weight:600; font-size:15px; border:none; cursor:default }
+  .btn-p{ background:var(--primary); color:var(--on-primary) }
+  .btn-s{ background:var(--muted); color:var(--muted-fg) }
+  .btn-d{ background:transparent; color:var(--destructive); border:1px solid var(--destructive) }
+  .input{ width:100%; padding:11px 13px; border-radius:var(--r-button);
+          border:1px solid var(--border); background:#fff; font:inherit; font-size:15px;
+          color:var(--foreground) }
+  .input::placeholder{ color:var(--muted-fg); opacity:.7 }
+  .ring{ outline:3px solid color-mix(in srgb, var(--primary) 35%, transparent); outline-offset:2px }
+
+  .list-item{ display:flex; align-items:center; gap:13px; padding:12px 0;
+              border-bottom:1px solid var(--border) }
+  .list-item:last-child{ border-bottom:none }
+  .li-ic{ width:34px; height:34px; border-radius:9px; background:var(--muted); flex:0 0 34px;
+          display:flex; align-items:center; justify-content:center }
+  .li-t{ font-weight:600; font-size:14.5px } .li-s{ font-size:12.5px; color:var(--muted-fg) }
+  .pill{ margin-left:auto; font-size:11px; font-weight:600; padding:4px 10px;
+         border-radius:99px; background:var(--muted); color:var(--secondary) }
+
+  .stat{ text-align:center }
+  .stat .v{ font-family:var(--font-h); font-size:38px; font-weight:700;
+            color:var(--secondary); line-height:1 }
+  .stat .k{ font-size:12px; color:var(--muted-fg); margin-top:6px }
+
+  .modes{ display:grid; gap:16px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)) }
+  .mode{ border-radius:18px; padding:30px 24px 26px; text-align:center;
+         border:1px solid var(--border); background:var(--surface); box-shadow:var(--shadow) }
+  .mode.dark{ background:var(--dark-bg); border-color:var(--dark-border) }
+  .mode .mk{ width:58px; height:58px; margin:0 auto 14px }
+  .mode .mk svg,.mode .mk img{ width:100%; height:100%; border-radius:23% }
+  .mode .t{ font-family:var(--font-h); font-size:26px; font-weight:600 }
+  .mode.dark .t{ color:var(--dark-fg) }
+  .mode .s{ font-size:14px; color:var(--muted-fg); margin-top:5px }
+  .mode.dark .s{ color:var(--dark-muted-fg) }
+  .mode .btn{ display:block; margin-top:9px }
+  .mode.dark .btn-p{ background:var(--dark-primary); color:var(--dark-on-primary) }
+  .mode.dark .btn-s{ background:var(--dark-surface); color:var(--dark-muted-fg) }
+
+  table{ width:100%; border-collapse:collapse }
+  .voice td{ padding:9px 12px 9px 0; border-bottom:1px solid var(--border);
+             vertical-align:top; font-size:14px }
+  .voice tr:last-child td{ border-bottom:none }
+  .voice .role{ width:170px; color:var(--muted-fg) }
+  .voice .say{ color:var(--secondary); font-weight:600 }
+  .voice .not{ color:var(--muted-fg); text-decoration:line-through }
+
+  footer{ border-top:1px solid var(--border); padding-top:20px; color:var(--muted-fg);
+          font-size:13px; display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="hero">
+    <div class="mark">{{LOGO_ICON_SVG}}</div>
+    <div>
+      <h1>{{PROJECT_NAME}}</h1>
+      <div class="tag">{{TAGLINE}}</div>
+      <div class="desc">{{DESCRIPTION}}</div>
+    </div>
+  </div>
+
+  <section>
+    <div class="sh"><h2>Logo system</h2><span>{{LOGO_SUMMARY}}</span></div>
+    <div class="grid g3">
+      <div class="card"><div class="lbl">Primary</div>
+        <div class="logobox on-light">{{LOGO_PRIMARY_SVG}}</div></div>
+      <div class="card"><div class="lbl">Mono dark</div>
+        <div class="logobox on-light">{{LOGO_MONO_DARK_SVG}}</div></div>
+      <div class="card"><div class="lbl">Mono light</div>
+        <div class="logobox on-dark">{{LOGO_MONO_LIGHT_SVG}}</div></div>
+      <div class="card"><div class="lbl">App icon</div>
+        <div class="logobox on-light">{{LOGO_ICON_SVG}}</div></div>
+      <div class="card"><div class="lbl">Wordmark</div>
+        <div class="logobox on-light">{{LOGO_WORDMARK_SVG}}</div></div>
+      <div class="card"><div class="lbl">Favicon</div>
+        <div class="favrow">
+          <figure>{{FAVICON_SVG_64}}<figcaption>64</figcaption></figure>
+          <figure>{{FAVICON_SVG_32}}<figcaption>32</figcaption></figure>
+          <figure>{{FAVICON_SVG_16}}<figcaption>16</figcaption></figure>
+        </div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>Colour — light</h2><span>{{PALETTE_LIGHT_NOTE}}</span></div>
+    <div class="grid g4">
+      {{#PALETTE_LIGHT}}
+      <div class="sw"><div class="chip" style="background:{{TOKEN_HEX}}"></div>
+        <div class="meta"><div class="n">{{TOKEN_NAME}}</div><div class="h">{{TOKEN_HEX}}</div></div></div>
+      {{/PALETTE_LIGHT}}
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>Colour — dark</h2><span>{{PALETTE_DARK_NOTE}}</span></div>
+    <div class="grid g4">
+      {{#PALETTE_DARK}}
+      <div class="sw darkpanel"><div class="chip" style="background:{{TOKEN_HEX}}"></div>
+        <div class="meta"><div class="n">{{TOKEN_NAME}}</div><div class="h">{{TOKEN_HEX}}</div></div></div>
+      {{/PALETTE_DARK}}
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>Typography</h2><span>{{HEADING_FONT_NAME}} headings · {{BODY_FONT_NAME}} body · {{TYPE_NOTE}}</span></div>
+    <div class="card">
+      {{#TYPE_SCALE}}
+      <div class="type-row"><div class="rl">{{ROLE}}</div>
+        <div style="{{SAMPLE_STYLE}}">{{SAMPLE_TEXT}}</div></div>
+      {{/TYPE_SCALE}}
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>{{KEY_SCREEN_NAME}}</h2><span>{{KEY_SCREEN_NOTE}}</span></div>
+    <div class="modes">
+      <div class="mode">
+        <div class="mk">{{LOGO_ICON_SVG}}</div>
+        <div class="t">{{KEY_SCREEN_TITLE}}</div>
+        <div class="s">{{KEY_SCREEN_SUBTITLE}}</div>
+        <span class="btn btn-p">{{PRIMARY_ACTION}}</span>
+        <span class="btn btn-s">{{SECONDARY_ACTION}}</span>
+      </div>
+      <div class="mode dark">
+        <div class="mk">{{LOGO_ICON_SVG}}</div>
+        <div class="t">{{KEY_SCREEN_TITLE}}</div>
+        <div class="s">{{KEY_SCREEN_SUBTITLE}}</div>
+        <span class="btn btn-p">{{PRIMARY_ACTION}}</span>
+        <span class="btn btn-s">{{SECONDARY_ACTION}}</span>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>UI components</h2><span>item list · stats · buttons · inputs</span></div>
+    <div class="grid g2">
+
+      <div class="card">
+        <div class="lbl">{{LIST_TITLE}}</div>
+        {{#LIST_ITEMS}}
+        <div class="list-item">
+          <div class="li-ic">{{ITEM_ICON}}</div>
+          <div><div class="li-t">{{ITEM_TITLE}}</div><div class="li-s">{{ITEM_SUBTITLE}}</div></div>
+          <div class="pill">{{ITEM_BADGE}}</div>
+        </div>
+        {{/LIST_ITEMS}}
+      </div>
+
+      <div class="card">
+        <div class="lbl">{{STATS_TITLE}}</div>
+        <div class="grid g3" style="margin-top:14px">
+          {{#STATS}}
+          <div class="stat"><div class="v">{{STAT_VALUE}}</div><div class="k">{{STAT_LABEL}}</div></div>
+          {{/STATS}}
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="lbl">Buttons</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;margin-bottom:14px">
+          <span class="btn btn-p">{{PRIMARY_ACTION}}</span>
+          <span class="btn btn-s">{{SECONDARY_ACTION}}</span>
+          <span class="btn btn-d">{{DESTRUCTIVE_ACTION}}</span>
+        </div>
+        <div class="lbl">Focus ring</div>
+        <span class="btn btn-p ring">{{PRIMARY_ACTION}}</span>
+      </div>
+
+      <div class="card">
+        <div class="lbl">{{INPUT_TITLE}}</div>
+        <input class="input" placeholder="{{INPUT_PLACEHOLDER}}" style="margin-bottom:10px">
+        <input class="input ring" value="{{INPUT_FILLED_VALUE}}" readonly>
+      </div>
+
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>Voice</h2><span>what we say, and what we never say</span></div>
+    <div class="card">
+      <table class="voice">
+        {{#VOICE}}
+        <tr><td class="role">{{VOICE_CONTEXT}}</td>
+          <td class="say">{{VOICE_SAY}}</td>
+          <td class="not">{{VOICE_NOT}}</td></tr>
+        {{/VOICE}}
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="sh"><h2>Tech stack</h2><span>{{TECH_SUMMARY}}</span></div>
+    <div class="grid g3">
+      {{#TECH_STACK}}
+      <div class="card"><div class="lbl">{{TECH_LAYER}}</div>
+        <b>{{TECH_CHOICE}}</b>
+        <div class="li-s" style="margin-top:6px">{{TECH_RATIONALE}}</div></div>
+      {{/TECH_STACK}}
+    </div>
+  </section>
+
+  <footer>
+    <span>{{PROJECT_NAME}} · Crucible brand preview · {{DATE}}</span>
+    <span>brand.md · design.md · tech-stack.md · logos/ · plans/</span>
+  </footer>
+
+</div>
+</body>
+</html>
