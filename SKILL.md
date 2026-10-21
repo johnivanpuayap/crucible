@@ -501,6 +501,7 @@ After generating all files, ask the user: "Want to see a visual preview of your 
 2. Replace all `{{PLACEHOLDER}}` tokens with actual values from the generated brand/design/tech-stack files
 3. For sections with `{{#LOOP}}...{{/LOOP}}` markers, repeat the inner HTML for each item
 4. Inline the SVG logos directly (from `logos/*.svg` or generate inline). For the dark mode preview row, use the `-mono-light` variants (white logos for dark backgrounds). If Phase 4 produced a logo brief instead of SVGs, replace SVG placeholders with the text descriptions from the brief, styled as paragraph text.
+   Every inlined copy shares one document, so give each copy unique `id`s and unique class names (e.g. `.ink` → `.ink-3` in both its `<style>` and `class="…"`) — otherwise the last SVG's `<style>` recolours all the others.
 5. Write the result to `docs/crucible/preview.html`
 
 **Rules:**
