@@ -23,8 +23,11 @@ docs/crucible/
 ├── plans/YYYY-MM-DD-<plan-name>.md      # Implementation plan
 ├── brand.md                              # Name, tagline, tone, personality
 ├── design.md                             # Palette, typography, style
-└── tech-stack.md                         # Recommended stack + rationale
+├── tech-stack.md                         # Recommended stack + rationale
+└── decisions/                            # HTML decision pages, one per choice point
 ```
+
+In interactive mode, every decision (names, colors, fonts, logos, stack...) is shown as an HTML page in your browser, so you choose by seeing, not just reading.
 
 ## Modes
 
