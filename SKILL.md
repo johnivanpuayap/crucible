@@ -45,6 +45,7 @@ User describes everything upfront. Crucible generates the full package in one pa
 - Phase 1: Write the design spec directly instead of invoking brainstorming interactively
 - Phase 4: Generate a logo brief by default (not SVG generation)
 - Skip TaskCreate tracking — just generate everything sequentially
+- Skip decision pages — `preview.html` covers the visual review
 - If `ui-ux-pro-max` is available, use its data but don't invoke it interactively
 
 ## Phase Transitions (Interactive Mode Only)
@@ -54,6 +55,25 @@ Between each phase, provide a brief recap and preview:
 > "Great — [phase name] is locked in. Here's what we decided: [1-2 line summary]. Next up: [next phase name] — [what it involves and why it matters]. Ready?"
 
 This keeps the user oriented and gives them a chance to revisit anything before moving forward.
+
+## Decision Pages (Interactive Mode Only)
+
+<HARD-GATE>
+Every decision the user is asked to make is also shown as an HTML page opened in the browser — never only as terminal text. This applies to every choice point in every phase.
+</HARD-GATE>
+
+**Covers:** Phase 1 clarifying questions with options, approach comparisons, and design sections; 2a names, 2b taglines, 2c tone, 2d personality; 3a color directions and the full palette, 3b typography, 3c UI style; 4a logo type and preferences, 4b logo concepts; 5 tech stack.
+
+**How to build a decision page:**
+- **Show options in context, not as lists.** Names and taglines appear as they would in the product (app icon label, header, splash screen). Colors, typography, and UI style are applied to a realistic mock of the product's main screen, with a light/dark toggle. Logo options are shown at 16px, 64px, and 512px on light and dark backgrounds. Text-only choices (concept questions, tone, tech stack) are laid out as side-by-side cards with trade-offs.
+- **Mark the recommendation** clearly on the page, matching the terminal recommendation.
+- **Build on earlier decisions.** Once a palette or font is chosen, every later page uses it.
+- **Self-contained:** inline CSS and JS; Google Fonts and inline SVG are fine; no other external assets.
+- **Save** to `docs/crucible/decisions/NN-<phase>-<topic>.html` (e.g. `03-3a-color-directions.html`) so the decision trail is kept. If the project folder doesn't exist yet (early Phase 1), write to a temporary location and move the pages into `decisions/` once it does. Revise the same file when the user asks for tweaks.
+- **Record the outcome:** after the user decides, mark the chosen option on the page (a "Chosen" badge) so the folder reads as a history of decisions.
+- **Open it** in the browser using the steps in "Opening the preview" (Phase 6). If opening fails, give the user the file path.
+
+**In the terminal**, still give a short summary of the options and the question, so the user can answer in chat while looking at the page.
 
 ## Re-running Crucible
 
@@ -337,6 +357,8 @@ docs/crucible/
 ├── brand.md                              # Name, tagline, tone, personality
 ├── design.md                             # Color palette, typography, UI style
 ├── tech-stack.md                         # Recommended stack with rationale
+├── decisions/                            # Decision pages (interactive mode), one per choice point
+│   └── NN-<phase>-<topic>.html           #   e.g. 03-3a-color-directions.html
 ├── logos/                                # Logo system (if generated in Phase 4)
 │   ├── logo.svg                          #   Primary logo (full color)
 │   ├── logo-mono-dark.svg                #   Primary logo (monochrome dark)
@@ -542,4 +564,5 @@ Check if `~/.crucible/config.json` exists.
 - **Best-fit always** — recommend the best stack/design regardless of user familiarity
 - **YAGNI** — strip unnecessary complexity from all recommendations
 - **Validate incrementally** — get approval after each phase before moving on
+- **Show, don't list** — every decision gets an HTML decision page in the browser (interactive mode)
 - **Standalone first** — the skill works without any external service
